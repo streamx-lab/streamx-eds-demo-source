@@ -56,6 +56,7 @@ jobs:
           source-provider: BatchSourceProvider
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
           streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
+          event-type: 'com.streamx.blueprints.web-resource.published.v1'
           workspace: ${{ github.workspace }}
           event-data: '{"type": "web-resource/static"}'
           include-patterns: ${{ vars.STREAMX_INGESTION_INCLUDES }}
