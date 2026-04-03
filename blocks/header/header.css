@@ -270,3 +270,22 @@ header nav .nav-sections ul > li > ul > li {
 header nav .nav-tools {
   grid-area: tools;
 }
+
+header #autocomplete {
+    width: 10rem;
+}
+
+/* stylelint-disable-next-line */
+.aa-DetachedCancelButton {
+    width: 6rem;
+}
+
+/* stylelint-disable-next-line */
+.aa-DetachedSearchButtonIcon {
+    cursor: pointer;
+}
+
+/* stylelint-disable-next-line */
+header .icon.icon-search {
+    display: none;
+}

@@ -109,6 +109,38 @@ async function loadEager(doc) {
   }
 }
 
+function loadAlgoliaScripts() {
+  const script1 = document.createElement('script');
+  script1.src = '/scripts/autocomplete-js.js';
+  script1.defer = true;
+  script1.nonce = 'aem';
+  document.body.appendChild(script1);
+
+  script1.onload = () => {
+    const script2 = document.createElement('script');
+    script2.src = '/scripts/autocomplete-init.js';
+    script2.defer = true;
+    script2.nonce = 'aem';
+    document.body.appendChild(script2);
+  };
+}
+
+/**
+ * Wraps search icon in a container that allows Algolia autocomplete.
+ */
+function attachAlgoliaSearch() {
+  const searchContainer = document.createElement('div');
+  searchContainer.setAttribute('id', 'autocomplete');
+
+  const searchIcon = document.querySelector('.icon.icon-search');
+
+  if (searchIcon) {
+    const currentIconParent = searchIcon.parentNode;
+    currentIconParent.removeChild(searchIcon);
+    currentIconParent.append(searchContainer);
+  }
+}
+
 /**
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
@@ -127,6 +159,9 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+
+  loadAlgoliaScripts();
+  attachAlgoliaSearch();
 }
 
 /**
