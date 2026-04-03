@@ -1,5 +1,5 @@
 mountpoints:
   /:
-    url: "https://author-p29757-e1606146.adobeaemcloud.com/bin/franklin.delivery/streamx-hub/streamx-eds-demo/main"
+    url: "https://author-p29757-e1606146.adobeaemcloud.com/bin/franklin.delivery/streamx-lab/streamx-eds-demo-source/main"
     type: "markup"
     suffix: ".html"
