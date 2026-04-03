@@ -50,7 +50,7 @@ jobs:
         with:
           source-provider: ExternalSourceProvider
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
           event-type: 'com.streamx.blueprints.page.published.v1'
           event-data: '{"type": "page/eds"}'
           external-resource-url: ${{ steps.vars.outputs.eds_page_url }}
@@ -65,7 +65,7 @@ jobs:
         with:
           source-provider: ExternalSourceProvider
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
           event-type: 'com.streamx.blueprints.web-resource.published.v1'
           event-data: '{"type": "web-resource/static"}'
           external-resource-url: ${{ steps.vars.outputs.eds_plain_page_url }}
@@ -95,7 +95,7 @@ jobs:
         with:
           source-provider: ExternalSourceProvider
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
           event-type: 'com.streamx.blueprints.web-resource.published.v1'
           event-data: '{"type": "web-resource/static"}'
           external-resource-url: ${{ steps.vars.outputs.eds_webresource_url }}

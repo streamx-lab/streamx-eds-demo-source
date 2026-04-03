@@ -42,7 +42,7 @@ jobs:
         with:
           event-type: 'com.streamx.blueprints.page.unpublished.v1'
           subject: ${{ steps.vars.outputs.streamx_subject }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
 
 
@@ -53,7 +53,7 @@ jobs:
         with:
           event-type: 'com.streamx.blueprints.page.unpublished.v1'
           subject: ${{ steps.vars.outputs.streamx_subject_plain }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
 
   unpublish-json-web-resources-from-streamx:
@@ -76,6 +76,6 @@ jobs:
         with:
           event-type: 'com.streamx.blueprints.web-resource.unpublished.v1'
           subject: ${{ steps.vars.outputs.streamx_subject }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_EDS_TOKEN }}
+          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
           streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
           snapshot-artifactory-token: ${{ steps.auth.outputs.access_token }}
