@@ -28,14 +28,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          workload_identity_provider: ${{ secrets.GCP_STREAMX_RELEASES_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_STREAMX_RELEASES_SNAPSHOT_READ_SA }}
-          token_format: access_token
-
       - name: Run sync with StreamX
         uses: streamx-hub/streamx-common-github-actions/.github/actions/connector-github@v1
         env:
@@ -55,14 +47,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v2'
-        with:
-          workload_identity_provider: ${{ secrets.GCP_STREAMX_RELEASES_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.GCP_STREAMX_RELEASES_SNAPSHOT_READ_SA }}
-          token_format: access_token
 
       - name: Run full sync with StreamX
         uses: streamx-hub/streamx-common-github-actions/.github/actions/connector-github@v1
