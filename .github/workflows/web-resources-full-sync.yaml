@@ -51,6 +51,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up homebrew
+        uses: 'Homebrew/actions/setup-homebrew@master'
+
+      - name: Install StreamX via Homebrew
+        run: |
+          brew install streamx-com/preview-tap/streamx
+
       - name: Install yq
         run: |
           sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
