@@ -56,7 +56,7 @@ jobs:
           echo "yq version:"
           yq --version
 
-          mapfile -t targets < <(yq e '.. | .target? // empty' helix-query.yaml)
+          mapfile -t targets < <(yq e '.. | select(has("target")) | .target' helix-query.yaml)
 
           created_files=()
 
