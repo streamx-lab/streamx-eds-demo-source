@@ -57,6 +57,8 @@ jobs:
       - name: Install StreamX via Homebrew
         run: |
           brew install streamx-com/preview-tap/streamx
+          streamx settings set streamx.ingestion.url ${{ vars.STREAMX_INGESTION_URL }}
+          streamx settings set streamx.ingestion.auth-token ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
 
       - name: Install yq
         run: |
