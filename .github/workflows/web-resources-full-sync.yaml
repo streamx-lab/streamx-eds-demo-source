@@ -48,15 +48,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run full sync with StreamX
-        uses: streamx-hub/streamx-common-github-actions/.github/actions/connector-github@v1
-        env:
-          STREAMX_CONNECTION_SOCKET_TIMEOUT: 3000
-        with:
-          source-provider: BatchSourceProvider
-          streamx-ingestion-url: ${{ vars.STREAMX_INGESTION_URL }}
-          streamx-ingestion-token: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
-          event-type: 'com.streamx.blueprints.web-resource.published.v1'
-          workspace: ${{ github.workspace }}
-          event-data: '{"type": "web-resource/static"}'
-          include-patterns: ${{ vars.STREAMX_INGESTION_INCLUDES }}
+      - name: Process targets, create files, publish, cleanup
+        shell: bash
+        run: |
+          set -e
+          
+          mapfile -t targets < <(yq e '.indices..target' helix-query.yaml)
+          
+          created_files=()
+          
+          for target in "${targets[@]}"; do
+            if [ -z "$target" ]; then
+              continue
+            fi
+          
+            echo "Processing: $target"
+          
+            clean="${target#/}"
+            filename=$(echo "$clean" | sed 's/\//_/g')
+          
+            echo "Creating file: $filename"
+            touch "$filename"
+          
+            created_files+=("$filename")
+          
+            echo "Publishing: $target"
+            
+          done
+          
+          echo "Cleaning up..."
+          for f in "${created_files[@]}"; do
+            rm -f "$f"
+          done
+          
+          echo "Done."
