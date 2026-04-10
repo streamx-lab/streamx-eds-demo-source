@@ -45,43 +45,64 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.publish_all_webresources == true
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Process targets, create files, publish, cleanup
+    - name: Generate and publish stream
         shell: bash
+        env:
+          EDS_URL: ${{ vars.EDS_URL }}
+          STREAMX_TOKEN: ${{ secrets.STREAMX_INGESTION_GH_TOKEN }}
         run: |
           set -e
-
-          echo "yq version:"
-          yq --version
-
-          mapfile -t targets < <(yq e '.. | select(has("target")) | .target' helix-query.yaml)
-
-          created_files=()
-
+          
+          echo "Generating event stream..."
+          
+          targets=()
+          
+          while IFS= read -r line; do
+            targets+=("$line")
+          done < <(
+            yq e '.. | select(has("target")) | .target' \
+            ./helix-query.yaml
+          )
+          
+          stream_file="stream.jsonl"
+          > "$stream_file"
+          
           for target in "${targets[@]}"; do
             if [ -z "$target" ]; then
               continue
             fi
-
-            echo "Processing: $target"
-
+          
             clean="${target#/}"
             filename=$(echo "$clean" | sed 's/\//_/g')
-
-            echo "Creating file: $filename"
-            touch "$filename"
-
-            created_files+=("$filename")
-
-            echo "Publishing: $target"
-            streamx publish "$target"
-          done
-
-          echo "Cleaning up..."
-          for f in "${created_files[@]}"; do
-            rm -f "$f"
-          done
-
-          echo "Done."
+          
+            uuid=$(uuidgen)
+            time=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          
+            url="${EDS_URL}/${filename}"
+          
+            cat >> "$stream_file" <<EOF
+            {
+              "specversion": "1.0",
+              "id": "${uuid}",
+              "source": "github",
+              "type": "com.streamx.blueprints.download.schedule.v1",
+              "datacontenttype": "application/json",
+              "subject": "${filename}",
+              "time": "${time}",
+              "data": {
+                "url": "${url}/${filename}",
+                "emitKey": "${filename}",
+                "emittedPageType": "",
+                "emittedWebResourceType": "web-resource/static",
+                "emittedAssetType": ""
+              }
+            }
+            EOF
+            
+            done
+            
+            echo "Publishing stream to StreamX..."
+            
+            streamx publish stream "$stream_file"
+            
+            echo "Done."
