@@ -52,33 +52,36 @@ jobs:
         shell: bash
         run: |
           set -e
-          
-          mapfile -t targets < <(yq e '.indices..target' helix-query.yaml)
-          
+
+          echo "yq version:"
+          yq --version
+
+          mapfile -t targets < <(yq e '.. | .target? // empty' helix-query.yaml)
+
           created_files=()
-          
+
           for target in "${targets[@]}"; do
             if [ -z "$target" ]; then
               continue
             fi
-          
+
             echo "Processing: $target"
-          
+
             clean="${target#/}"
             filename=$(echo "$clean" | sed 's/\//_/g')
-          
+
             echo "Creating file: $filename"
             touch "$filename"
-          
+
             created_files+=("$filename")
-          
+
             echo "Publishing: $target"
-            
+            streamx publish "$target"
           done
-          
+
           echo "Cleaning up..."
           for f in "${created_files[@]}"; do
             rm -f "$f"
           done
-          
+
           echo "Done."
